@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+
+<div th:each="vehicle : ${vehicles}">
+    <p th:text="${'Id = ' + vehicle.getId() + ', price = ' + vehicle.getPrice() +
+    ', year of manufacture = ' + vehicle.getYearManufacture()}">vehicle</p>
+</div>
+
+<br/>
+<hr/>
+
+
+</body>
+</html>
