@@ -5,19 +5,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.project.carpark.dto.VehicleDto;
 import ru.project.carpark.service.VehicleService;
 
+import java.util.List;
 
 @Controller
-@RequestMapping("/car")
+@RequestMapping
 @RequiredArgsConstructor
 public class VehicleController {
 
     private final VehicleService vehicleService;
 
     @GetMapping
-    public String getAll(Model model) {
-        model.addAttribute("vehicles", vehicleService.getAllVehicles());
+    public String getAll() {
+        return "index";
+    }
+
+    @GetMapping("/car")
+    public String getAllCars(Model model) {
+        List<VehicleDto> vehicles = vehicleService.getAllVehicles();
+        model.addAttribute("vehicles", vehicles);
         return "car/index";
     }
 }

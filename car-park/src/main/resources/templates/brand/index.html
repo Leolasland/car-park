@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Brands</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../../static/css/stlsht.css"
+          th:href="@{/static/css/stlsht.css}"/>
+</head>
+<body>
+
+<h2>List of brand</h2>
+
+<br/>
+<div class="shtstarter">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>MACHINE TYPE</th>
+            <th>TANK</th>
+            <th>LOAD CAPACITY</th>
+            <th>SEATS NUMBER</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="brands" type="ru.project.carpark"*/-->
+        <tr th:each="brand : ${brands}">
+            <td th:text="${brand.getId()}">ID</td>
+            <td th:text="${brand.getName()}">NAME</td>
+            <td th:text="${brand.getMachineType()}">MACHINE TYPE</td>
+            <td th:text="${brand.getTank()}">TANK</td>
+            <td th:text="${brand.getLoadCapacity()}">LOAD CAPACITY</td>
+            <td th:text="${brand.getSeatsNumber()}">SEATS NUMBER</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<br/>
+<hr/>
+
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+html {
+    background-color: #f0f0f0;
+}
+
+body {
+    font-family: 'DejaVu Sans', Arial, Helvetica;
+    font-size: 12px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    margin: 0px auto;
+    padding: 20px 20px;
+    width: 850px;
+}
+
+h2 {
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+div.shtstarter {
+
+}
+
+div.shtstarter > table {
+    width: 100%;
+    border: 1px solid #000;
+    border-collapse: collapse;
+}
+
+div.shtstarter > table > tbody > tr > td, div.shtstarter > table > thead > tr > th {
+    padding: 2px 10px;
+    border-left: 1px dotted #000000;
+    vertical-align: top;
+    line-height: 20px;
+}
+
+div.shtstarter > table > tbody > tr, div.shtstarter > table > thead > tr {
+    border-bottom: 1px solid #000000;
+}
+
+div.shtstarter > table th {
+    background-color: #99cc33;
+}
+
+div.shtstarter > table > tbody > tr > td > table {
+    width: 100%;
+    border-collapse: separate;
+}
+
+div.shtstarter > table > tbody > tr > td > table > tbody > tr> td {
+    background-color: #ddff77;
+    padding: 0px 5px;
+}
+
+div.shtstarter > table > tbody > tr > td > table > tbody > tr> td:last-child {
+    text-align: right;
+}

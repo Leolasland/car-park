@@ -2,14 +2,14 @@ package ru.project.carpark.dto;
 
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
 public class VehicleDto {
 
-    private UUID id;
+    private Integer id;
 
-    private String price;
+    private Long price;
 
     private String yearManufacture;
+
+    private BrandDto carBrand;
 }

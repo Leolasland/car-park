@@ -1,3 +1,3 @@
-insert into vehicle (id, price, year_manufacture) VALUES (gen_random_uuid(), '2 000 000' ,'2010');
-insert into vehicle (id, price, year_manufacture) VALUES (gen_random_uuid(), '1 000 000' ,'2000');
-insert into vehicle (id, price, year_manufacture) VALUES (gen_random_uuid(), '3 000 000' ,'2020');
+insert into vehicle (id, price, year_manufacture) VALUES (1, 2000000, '2010');
+insert into vehicle (id, price, year_manufacture) VALUES (2, 1000000, '2000');
+insert into vehicle (id, price, year_manufacture) VALUES (3, 3000000, '2020');

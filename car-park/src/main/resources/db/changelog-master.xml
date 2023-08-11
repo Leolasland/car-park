@@ -5,5 +5,8 @@
 
     <include file="classpath:db/data/create_table_vehicle.sql" relativeToChangelogFile="false"/>
     <include file="classpath:db/data/init_table_vehicle.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:db/data/create_table_brand.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:db/data/init_table_brand.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:db/data/alter_column_ref_brand_to_vehicle.sql" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

@@ -2,13 +2,36 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Index</title>
+    <title>Cars</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../../static/css/stlsht.css"
+          th:href="@{/static/css/stlsht.css}"/>
 </head>
 <body>
 
-<div th:each="vehicle : ${vehicles}">
-    <p th:text="${'Id = ' + vehicle.getId() + ', price = ' + vehicle.getPrice() +
-    ', year of manufacture = ' + vehicle.getYearManufacture()}">vehicle</p>
+<h2>List of vehicles</h2>
+
+<br/>
+<div class="shtstarter">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>PRICE</th>
+            <th>YEAR OF MANUFACTURE</th>
+            <th>BRAND</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="vehicles" type="ru.project.carpark"*/-->
+        <tr th:each="vehicle : ${vehicles}">
+            <td th:text="${vehicle.getId()}">ID</td>
+            <td th:text="${vehicle.getPrice()}">PRICE</td>
+            <td th:text="${vehicle.getYearManufacture()}">YEAR OF MANUFACTURE</td>
+            <td> <a href="/brand" th:text="${vehicle.getCarBrand().getName()}">BRAND</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 <br/>

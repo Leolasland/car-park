@@ -3,21 +3,23 @@ package ru.project.carpark.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Entity
 @Table(name = "vehicle")
 @Data
 public class Vehicle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private UUID id;
+    private Integer id;
 
     @Column(name = "price")
-    private String price;
+    private Long price;
 
     @Column(name = "year_manufacture")
     private String yearManufacture;
+
+    @ManyToOne
+    @JoinColumn(name = "brand_id", referencedColumnName = "id")
+    private Brand carBrand;
 }
