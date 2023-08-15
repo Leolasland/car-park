@@ -2,6 +2,8 @@ package ru.project.carpark.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ru.project.carpark.enums.MachineType;
 
 import java.util.List;
@@ -32,6 +34,8 @@ public class Brand {
     @Column(name = "seats_number")
     private Integer seatsNumber;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToMany(mappedBy = "carBrand")
     private List<Vehicle> vehicles;
 }

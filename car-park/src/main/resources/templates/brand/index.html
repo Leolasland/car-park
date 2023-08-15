@@ -28,7 +28,7 @@
         <tr th:each="brand : ${brands}">
             <td th:text="${brand.getId()}">ID</td>
             <td th:text="${brand.getName()}">NAME</td>
-            <td th:text="${brand.getMachineType()}">MACHINE TYPE</td>
+            <td th:text="${brand.getMachineType().getTitle()}">MACHINE TYPE</td>
             <td th:text="${brand.getTank()}">TANK</td>
             <td th:text="${brand.getLoadCapacity()}">LOAD CAPACITY</td>
             <td th:text="${brand.getSeatsNumber()}">SEATS NUMBER</td>

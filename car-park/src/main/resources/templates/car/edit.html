@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit car</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../../static/css/stlsht.css"
+          th:href="@{/static/css/stlsht.css}"/>
+</head>
+<body>
+
+<form th:method="PATCH" th:action="@{/car/{id}(id=${vehicle.getId()})}" th:object="${vehicle}">
+    <label for="price">Enter price: </label>
+    <input type="text" th:field="*{price}" id="price">
+    <br/>
+    <br/>
+    <label for="yearManufacture">Enter year of manufacture: </label>
+    <input type="text" th:field="*{yearManufacture}" id="yearManufacture">
+    <br/>
+    <br/>
+    <label for="brand">Select brand</label>
+    <select th:field="*{carBrand}" id="brand">
+        <option th:each="carBrand : ${brands}" th:value="${carBrand.getName()}" th:text="${carBrand.getName()}">
+        </option>
+    </select>
+    <br/>
+    <br/>
+    <input type="submit" value="Confirm edit car"/>
+</form>
+
+</body>
+</html>

@@ -24,15 +24,20 @@
         <tbody>
         <!--/*@thymesVar id="vehicles" type="ru.project.carpark"*/-->
         <tr th:each="vehicle : ${vehicles}">
-            <td th:text="${vehicle.getId()}">ID</td>
+            <td> <a th:href="@{/car/{id}(id=${vehicle.getId()})}"
+                   th:text="${vehicle.getId()}">ID</a>
+            </td>
             <td th:text="${vehicle.getPrice()}">PRICE</td>
             <td th:text="${vehicle.getYearManufacture()}">YEAR OF MANUFACTURE</td>
-            <td> <a href="/brand" th:text="${vehicle.getCarBrand().getName()}">BRAND</a>
+            <td> <a href="/brand" th:text="${vehicle.getCarBrand()}">BRAND</a>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
+<br/>
+
+<a href="/car/new">Add new car</a>
 
 <br/>
 <hr/>

@@ -27,4 +27,8 @@ public class BrandService {
         }
         return brands.stream().map(brandMapper::entityToDto).toList();
     }
+
+    public Brand findByName(String name) {
+        return brandRepository.findBrandByName(name).orElse(null);
+    }
 }

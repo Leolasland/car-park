@@ -11,5 +11,5 @@ public class VehicleDto {
 
     private String yearManufacture;
 
-    private BrandDto carBrand;
+    private String carBrand;
 }

@@ -2,9 +2,9 @@ package ru.project.carpark.enums;
 
 public enum MachineType {
 
-    PASSENGER_CAR("Легковой автомобиль"),
-    TRUCK("Грузовой автомобиль"),
-    BUS("Автобус");
+    PASSENGER_CAR("Passenger car"),
+    TRUCK("Truck"),
+    BUS("Bus");
 
     private final String title;
 
