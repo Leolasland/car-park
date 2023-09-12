@@ -5,38 +5,31 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.List;
-
 @Entity
-@Table(name = "vehicle")
+@Table(name = "enterprise")
 @Data
-public class Vehicle {
+public class Driver {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "price")
-    private Long price;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "year_manufacture")
-    private String yearManufacture;
-
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "brand_id", referencedColumnName = "id")
-    private Brand carBrand;
+    @Column(name = "salary")
+    private Integer salary;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "enterprise_id", referencedColumnName = "id")
-    private Enterprise company;
+    private Enterprise employer;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "car")
-    private List<Driver> drivers;
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
+    private Vehicle car;
 }

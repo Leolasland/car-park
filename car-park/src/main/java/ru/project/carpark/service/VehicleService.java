@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.project.carpark.converter.CarMapper;
+import ru.project.carpark.dto.CarDto;
 import ru.project.carpark.dto.VehicleDto;
 import ru.project.carpark.converter.VehicleMapper;
 import ru.project.carpark.entity.Brand;
@@ -21,7 +23,7 @@ public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
     private final VehicleMapper vehicleMapper;
-
+    private final CarMapper carMapper;
     private final BrandService brandService;
 
     public List<VehicleDto> getAllVehicles() {
@@ -31,6 +33,15 @@ public class VehicleService {
             return new ArrayList<>();
         }
         return vehicles.stream().map(vehicleMapper::entityToDto).toList();
+    }
+
+    public List<CarDto> getAllCars() {
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        if (vehicles.isEmpty()) {
+            log.info("Vehicles not found");
+            return new ArrayList<>();
+        }
+        return vehicles.stream().map(carMapper::entityToDto).toList();
     }
 
     public VehicleDto findById(Integer id) {
