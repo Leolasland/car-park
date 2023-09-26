@@ -10,4 +10,6 @@ public class DriverDto {
     private String name;
 
     private Integer salary;
+
+    private Integer carId;
 }

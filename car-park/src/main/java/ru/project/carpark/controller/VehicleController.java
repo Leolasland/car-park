@@ -20,7 +20,7 @@ public class VehicleController {
     private final VehicleService vehicleService;
     private final BrandService brandService;
 
-    @GetMapping
+    @GetMapping("/index")
     public String getAll() {
         return "index";
     }

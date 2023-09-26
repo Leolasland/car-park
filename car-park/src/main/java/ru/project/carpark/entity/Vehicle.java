@@ -37,6 +37,9 @@ public class Vehicle {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "car")
+    @ManyToMany
+    @JoinTable(name = "vehicle_driver",
+            joinColumns = @JoinColumn(name = "vehicle_id"),
+            inverseJoinColumns = @JoinColumn(name = "driver_id"))
     private List<Driver> drivers;
 }

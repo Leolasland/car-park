@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
 @Entity
-@Table(name = "driver")
+@Table(name = "manager")
 @Data
-public class Driver {
+public class Manager{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,17 +21,14 @@ public class Driver {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "salary")
-    private Integer salary;
+    @Column(name = "password")
+    private String password;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "enterprise_id", referencedColumnName = "id")
-    private Enterprise employer;
-
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @ManyToMany(mappedBy = "drivers")
-    private List<Vehicle> cars;
+    @ManyToMany
+    @JoinTable(name = "manager_enterprise",
+            joinColumns = @JoinColumn(name = "manager_id"),
+            inverseJoinColumns = @JoinColumn(name = "enterprise_id"))
+    private List<Enterprise> enterprises;
 }

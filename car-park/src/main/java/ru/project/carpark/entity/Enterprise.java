@@ -32,4 +32,9 @@ public class Enterprise {
     @ToString.Exclude
     @OneToMany(mappedBy = "employer")
     private List<Driver> drivers;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "enterprises")
+    private List<Manager> managers;
 }
