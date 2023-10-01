@@ -27,6 +27,6 @@ public class ManagerDetailsService implements UserDetailsService {
         }
         Manager manager = managerByName.get();
         return new ManagerDetails(manager.getName(), manager.getPassword(), Collections
-                .unmodifiableList(AuthorityUtils.createAuthorityList("ROLE_USER")), manager);
+                .unmodifiableList(AuthorityUtils.createAuthorityList(manager.getRole())), manager);
     }
 }

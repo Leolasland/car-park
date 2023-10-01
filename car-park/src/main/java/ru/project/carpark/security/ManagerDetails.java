@@ -14,9 +14,6 @@ public class ManagerDetails extends User {
 
     private final Manager manager;
 
-    private static final List<GrantedAuthority> ROLE_USER = Collections
-            .unmodifiableList(AuthorityUtils.createAuthorityList("ROLE_USER"));
-
     public ManagerDetails(String username, String password,
                           Collection<? extends GrantedAuthority> authorities,
                           Manager manager) {
@@ -26,7 +23,9 @@ public class ManagerDetails extends User {
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        return ROLE_USER;
+        String role = manager.getRole();
+        return Collections
+                .unmodifiableList(AuthorityUtils.createAuthorityList(role));
     }
 
     public Manager getManager() {

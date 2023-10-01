@@ -31,4 +31,7 @@ public class Manager{
             joinColumns = @JoinColumn(name = "manager_id"),
             inverseJoinColumns = @JoinColumn(name = "enterprise_id"))
     private List<Enterprise> enterprises;
+
+    @Column(name = "role")
+    private String role;
 }

@@ -19,5 +19,6 @@
     <include file="classpath:db/data/init_table_manager.sql" relativeToChangelogFile="false"/>
     <include file="classpath:db/data/create_table_manager_enterprise.sql" relativeToChangelogFile="false"/>
     <include file="classpath:db/data/init_table_manager_enterprise.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:db/data/add_role.sql" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>
