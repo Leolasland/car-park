@@ -7,14 +7,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.project.carpark.converter.CarMapper;
+import ru.project.carpark.dto.BrandDto;
 import ru.project.carpark.dto.CarDto;
 import ru.project.carpark.dto.VehicleDto;
 import ru.project.carpark.converter.VehicleMapper;
 import ru.project.carpark.entity.Brand;
+import ru.project.carpark.entity.Enterprise;
 import ru.project.carpark.entity.Manager;
 import ru.project.carpark.entity.Vehicle;
+import ru.project.carpark.exception.BadRequestException;
 import ru.project.carpark.repository.ManagerRepository;
 import ru.project.carpark.repository.VehicleRepository;
+import ru.project.carpark.utils.Generator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -93,5 +97,26 @@ public class VehicleService {
     @Transactional
     public void delete(Integer id) {
         vehicleRepository.deleteById(id);
+    }
+
+    @Transactional
+    public List<Vehicle> generateVehicles(int count, Enterprise enterprise) {
+        List<Vehicle> result = new ArrayList<>();
+        List<BrandDto> allBrands = brandService.getAllBrands();
+        for (int i = 0; i < count; i++) {
+            Vehicle vehicle = new Vehicle();
+            vehicle.setPrice(Generator.generateLong());
+            vehicle.setYearManufacture(Generator.generateString());
+            Optional<String> brandName = allBrands.stream().findAny().map(BrandDto::getName);
+            if (brandName.isEmpty()) {
+                throw new BadRequestException("Brands not found");
+            }
+            Brand brand = brandService.findByName(brandName.get());
+            vehicle.setCarBrand(brand);
+            vehicle.setCompany(enterprise);
+            result.add(vehicle);
+        }
+        vehicleRepository.saveAll(result);
+        return result;
     }
 }

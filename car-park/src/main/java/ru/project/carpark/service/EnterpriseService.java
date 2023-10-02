@@ -2,21 +2,22 @@ package ru.project.carpark.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.SpringApplication;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.project.carpark.converter.EnterpriseMapper;
 import ru.project.carpark.dto.EnterpriseDto;
+import ru.project.carpark.entity.Driver;
 import ru.project.carpark.entity.Enterprise;
 import ru.project.carpark.entity.Manager;
+import ru.project.carpark.entity.Vehicle;
 import ru.project.carpark.repository.EnterpriseRepository;
 import ru.project.carpark.repository.ManagerRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import static ru.project.carpark.utils.Generator.generateString;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,10 @@ public class EnterpriseService {
     private final EnterpriseRepository enterpriseRepository;
     private final EnterpriseMapper enterpriseMapper;
     private final ManagerRepository managerRepository;
+
+    private final VehicleService vehicleService;
+
+    private final DriverService driverService;
 
     public List<EnterpriseDto> getAllEnterprises() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -42,5 +47,41 @@ public class EnterpriseService {
         }
         return enterprises.stream().filter(e -> e.getManagers().contains(manager))
                 .map(enterpriseMapper::entityToDto).toList();
+    }
+
+    @Transactional
+    public List<EnterpriseDto> generateEnterprises(Integer enterpriseCount, Integer carCount) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
+        Optional<Manager> managerByName = managerRepository.findManagerByName(name);
+        if (managerByName.isEmpty()) {
+            return Collections.emptyList();
+        }
+        Manager manager = managerByName.get();
+
+        List<Enterprise> result = new ArrayList<>();
+        for (int i = 0; i < enterpriseCount; i++) {
+            Enterprise enterprise = new Enterprise();
+            enterprise.setName(generateString());
+            enterprise.setCity(generateString());
+            enterprise.setManagers(List.of(manager));
+            List<Vehicle> vehicles = vehicleService.generateVehicles(carCount > 0 ? carCount : 10, enterprise);
+            List<Driver> drivers = driverService.generateDrivers(carCount > 0 ? carCount : 10, enterprise);
+            List<Driver> activeDrivers = drivers.stream().skip(9)
+                    .filter(d -> (drivers.indexOf(d) + 1) % 10 == 0).toList();
+            List<Vehicle> activeVehicles = vehicles.stream().skip(9)
+                    .filter(v -> (vehicles.indexOf(v) + 1) % 10 == 0).toList();
+            activeVehicles.forEach(vehicle -> vehicle.setDrivers(activeDrivers));
+            activeDrivers.forEach(d -> d.setCars(activeVehicles));
+            enterprise.setVehicles(vehicles);
+            enterprise.setDrivers(drivers);
+            result.add(enterprise);
+            enterpriseRepository.save(enterprise);
+        }
+        List<Enterprise> managerEnterprises = manager.getEnterprises();
+        managerEnterprises.addAll(result);
+        manager.setEnterprises(managerEnterprises);
+        managerRepository.save(manager);
+        return result.stream().map(enterpriseMapper::entityToDto).toList();
     }
 }
