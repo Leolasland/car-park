@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -22,6 +24,9 @@ public class Enterprise {
 
     @Column(name = "city")
     private String city;
+
+    @Column(name = "time_zone")
+    private String timezone;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

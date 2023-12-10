@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -22,6 +24,9 @@ public class Vehicle {
 
     @Column(name = "year_manufacture")
     private String yearManufacture;
+
+    @Column(name = "dt_buy")
+    private ZonedDateTime dtBuy = ZonedDateTime.now(ZoneOffset.UTC);
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -42,4 +47,9 @@ public class Vehicle {
             joinColumns = @JoinColumn(name = "vehicle_id"),
             inverseJoinColumns = @JoinColumn(name = "driver_id"))
     private List<Driver> drivers;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "vehicle")
+    private List<CarTrack> tracks;
 }

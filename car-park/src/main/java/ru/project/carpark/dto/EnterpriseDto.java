@@ -2,6 +2,7 @@ package ru.project.carpark.dto;
 
 import lombok.Data;
 
+import java.time.ZoneId;
 import java.util.List;
 
 @Data
@@ -12,6 +13,8 @@ public class EnterpriseDto {
     private String name;
 
     private String city;
+
+    private String timezone;
 
     private List<Integer> vehicles;
 

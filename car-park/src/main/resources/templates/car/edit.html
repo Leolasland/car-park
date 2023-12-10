@@ -2,30 +2,48 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Edit car</title>
-    <link rel="stylesheet" type="text/css" media="all" href="../../static/css/stlsht.css"
-          th:href="@{/static/css/stlsht.css}"/>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
+    <link rel="stylesheet" href="../../static/css/bootstrap.css">
+    <meta name="theme-color" content="#712cf9">
+    <link rel="stylesheet" href="../../static/css/cover.css">
 </head>
-<body>
+<body class="d-flex h-100 text-bg-dark">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="mb-auto">
+        <div>
+            <h3 class="float-md-start mb-0">Car park</h3>
+            <nav class="nav nav-masthead justify-content-center float-md-end">
+                <a class="nav-link fw-bold py-1 px-0 active" aria-current="page" href="#"></a>
+                <a class="nav-link fw-bold py-1 px-0" href="#"></a>
+                <a class="nav-link fw-bold py-1 px-0" href="#"></a>
+            </nav>
+        </div>
+    </header>
 
-<form th:method="PATCH" th:action="@{/car/{id}(id=${vehicle.getId()})}" th:object="${vehicle}">
-    <label for="price">Enter price: </label>
-    <input type="text" th:field="*{price}" id="price">
-    <br/>
-    <br/>
-    <label for="yearManufacture">Enter year of manufacture: </label>
-    <input type="text" th:field="*{yearManufacture}" id="yearManufacture">
-    <br/>
-    <br/>
-    <label for="brand">Select brand</label>
-    <select th:field="*{carBrand}" id="brand">
-        <option th:each="carBrand : ${brands}" th:value="${carBrand.getName()}" th:text="${carBrand.getName()}">
-        </option>
-    </select>
-    <br/>
-    <br/>
-    <input type="submit" value="Confirm edit car"/>
-</form>
-
+    <main class="px-3">
+        <form th:method="PATCH" th:action="@{/car/{id}(id=${vehicle.getId()})}"
+              th:object="${vehicle}">
+            <label for="price">Enter price: </label>
+            <input type="text" th:field="*{price}" id="price">
+            <br/>
+            <br/>
+            <label for="yearManufacture">Enter year of manufacture: </label>
+            <input type="text" th:field="*{yearManufacture}" id="yearManufacture">
+            <br/>
+            <br/>
+            <label for="brand">Select brand</label>
+            <select th:field="*{carBrand}" id="brand">
+                <option th:each="carBrand : ${brands}" th:value="${carBrand.getName()}"
+                        th:text="${carBrand.getName()}">
+                </option>
+            </select>
+            <br/>
+            <br/>
+            <input type="submit" value="Confirm edit car"/>
+        </form>
+    </main>
+</div>
 </body>
 </html>

@@ -1,6 +1,8 @@
-package ru.project.carpark.controller;
+package ru.project.carpark.controller.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import ru.project.carpark.dto.EnterpriseDto;
 import ru.project.carpark.exception.BadRequestException;
@@ -16,8 +18,8 @@ public class EnterpriseController {
     private final EnterpriseService enterpriseService;
 
     @GetMapping
-    public List<EnterpriseDto> allEnterprises() {
-        return enterpriseService.getAllEnterprises();
+    public Page<EnterpriseDto> allEnterprises(Pageable pageable) {
+        return enterpriseService.getAllEnterprises(pageable);
     }
 
     @PostMapping

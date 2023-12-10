@@ -9,15 +9,14 @@ import ru.project.carpark.entity.Driver;
 import ru.project.carpark.entity.Enterprise;
 import ru.project.carpark.entity.Vehicle;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(config = DefaultMapperConfig.class)
 public interface EnterpriseMapper {
 
     @Mapping(target = "vehicles", source = "vehicles", qualifiedByName = "vehiclesId")
     @Mapping(target = "drivers", source = "drivers", qualifiedByName = "driversId")
+    @Mapping(target = "timezone", source = "timezone")
     EnterpriseDto entityToDto(Enterprise enterprise);
 
     @Mapping(target = "vehicles", ignore = true)
@@ -26,12 +25,12 @@ public interface EnterpriseMapper {
     Enterprise dtoToEntity(EnterpriseDto enterpriseDto);
 
     @Named("vehiclesId")
-    default List<Integer> vehiclesId(List<Vehicle> vehicles){
+    default List<Integer> vehiclesId(List<Vehicle> vehicles) {
         return vehicles.stream().map(Vehicle::getId).toList();
     }
 
     @Named("driversId")
-    default List<Integer> driversId(List<Driver> drivers){
+    default List<Integer> driversId(List<Driver> drivers) {
         return drivers.stream().map(Driver::getId).toList();
     }
 }

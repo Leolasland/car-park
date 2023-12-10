@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
+    <link rel="stylesheet" href="../../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../../static/css/sign-in.css">
+    <title>Sign in</title>
+
+</head>
+
+<body class="d-flex align-items-center py-4 bg-body-tertiary">
+<main class="form-signin w-100 m-auto">
+    <form th:method="POST" th:action="@{/login}">
+        <h1 class="h3 mb-3 fw-normal">Please Sign In</h1>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="floatingInput" placeholder="Enter Username"
+            name="username">
+            <label for="floatingInput">Username</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Enter Password"
+            name="password">
+            <label for="floatingPassword">Password</label>
+        </div>
+
+    <button class="btn btn-success w-100 py-2" type="submit">Sign In</button>
+    </form>
+
+
+<!-- Сначала подключаем библиотеку JQuery, затем — Bootstrap JS -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+<script src="../../static/js/bootstrap.js"></script>
+
+</main>
+</body>
+
+</html>

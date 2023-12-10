@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Enterprise</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
+    <link rel="stylesheet" href="../../static/css/bootstrap.css">
+    <meta name="theme-color" content="#712cf9">
+    <link rel="stylesheet" href="../../static/css/cover.css">
+</head>
+<body class="d-flex h-100 text-center text-bg-dark">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="mb-auto">
+        <div>
+            <h3 class="float-md-start mb-0">Car park</h3>
+            <nav class="nav nav-masthead justify-content-center float-md-end">
+                <a class="nav-link fw-bold py-1 px-0 active" aria-current="page" href="#"></a>
+                <a class="nav-link fw-bold py-1 px-0" href="#"></a>
+                <a class="nav-link fw-bold py-1 px-0" href="#"></a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="px-3">
+        <h1>This is your enterprise.</h1>
+        <ul class="list-group" id="enterprise-list">
+        </ul>
+    </main>
+
+    <footer class="mt-auto text-white-50">
+        <p>By car park</p>
+    </footer>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="../../static/js/bootstrap.js"></script>
+<script>
+    $.getJSON('../enterprise', function(data) {
+        $.each(data.content, function(index, element) {
+            $('#enterprise-list').append('<li class="list-group-item">' +
+                '<ul class="list-group">' +
+                '<li class="list-group-item"> Name is: ' +
+                element.name +
+                '</li>' +
+                '<li class="list-group-item"> City is: ' +
+                element.city +
+                '</li>' +
+                '<li class="list-group-item"> Drivers id are: ' +
+                element.drivers +
+                '</li>' +
+                '<li class="list-group-item"> Vehicles id are: ' +
+                element.vehicles +
+                '</li>' +
+                '<li class="list-group-item"> <a class="nav-link fw-bold py-1 px-0" ' +
+                'href="/show/enterprise?id='+ element.id +
+                '"> See more </a>' +
+                '</li>' +
+                '</ul>' +
+                '</li>' );
+        });
+    });
+</script>
+</body>
+</html>

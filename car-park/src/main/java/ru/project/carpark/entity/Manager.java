@@ -4,14 +4,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
 @Entity
 @Table(name = "manager")
 @Data
-public class Manager{
+public class Manager {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

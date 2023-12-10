@@ -9,16 +9,9 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.project.carpark.entity.Manager;
-import ru.project.carpark.security.ManagerDetails;
 import ru.project.carpark.service.ManagerDetailsService;
 
 @Configuration
@@ -33,15 +26,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(Customizer.withDefaults())
+                .formLogin(l -> l.loginPage("/login")
+                        .defaultSuccessUrl("/index/enterprise"))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/login", "/static/**").permitAll()
                         .requestMatchers(HttpMethod.POST).hasRole(ROLE_MANAGER)
                         .requestMatchers(HttpMethod.PUT).hasRole(ROLE_MANAGER)
                         .requestMatchers(HttpMethod.DELETE).hasRole(ROLE_MANAGER)
                         .anyRequest().authenticated()
-                )
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(l -> l.defaultSuccessUrl("/index"));
+                );
         return http.build();
     }
 

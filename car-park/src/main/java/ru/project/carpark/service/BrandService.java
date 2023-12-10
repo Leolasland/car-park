@@ -31,4 +31,13 @@ public class BrandService {
     public Brand findByName(String name) {
         return brandRepository.findBrandByName(name).orElse(null);
     }
+
+    public List<Brand> getAllBrandsEntities() {
+        List<Brand> brands = brandRepository.findAll();
+        if (brands.isEmpty()) {
+            log.info("Brands are not found");
+            return new ArrayList<>();
+        }
+        return brands;
+    }
 }

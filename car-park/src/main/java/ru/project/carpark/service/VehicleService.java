@@ -2,28 +2,30 @@ package ru.project.carpark.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.project.carpark.converter.CarMapper;
+import ru.project.carpark.converter.CarTrackMapper;
 import ru.project.carpark.dto.BrandDto;
 import ru.project.carpark.dto.CarDto;
+import ru.project.carpark.dto.CarTrackDto;
 import ru.project.carpark.dto.VehicleDto;
 import ru.project.carpark.converter.VehicleMapper;
-import ru.project.carpark.entity.Brand;
-import ru.project.carpark.entity.Enterprise;
-import ru.project.carpark.entity.Manager;
-import ru.project.carpark.entity.Vehicle;
+import ru.project.carpark.entity.*;
 import ru.project.carpark.exception.BadRequestException;
 import ru.project.carpark.repository.ManagerRepository;
 import ru.project.carpark.repository.VehicleRepository;
 import ru.project.carpark.utils.Generator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +35,11 @@ public class VehicleService {
     private final VehicleRepository vehicleRepository;
     private final VehicleMapper vehicleMapper;
     private final CarMapper carMapper;
+    private final CarTrackMapper carTrackMapper;
     private final BrandService brandService;
     private final ManagerRepository managerRepository;
+
+    private static final Pageable PAGEABLE = Pageable.ofSize(50);
 
     public List<VehicleDto> getAllVehicles() {
         List<Vehicle> vehicles = vehicleRepository.findAll();
@@ -45,21 +50,25 @@ public class VehicleService {
         return vehicles.stream().map(vehicleMapper::entityToDto).toList();
     }
 
-    public List<CarDto> getAllCars() {
+    public Page<CarDto> getAllCars(Pageable pageable) {
+        pageable = Objects.isNull(pageable) ? PAGEABLE : pageable;
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
         Optional<Manager> managerByName = managerRepository.findManagerByName(name);
         if (managerByName.isEmpty()) {
-            return Collections.emptyList();
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
         }
         Manager manager = managerByName.get();
-        List<Vehicle> vehicles = vehicleRepository.findAll();
+
+        Page<Vehicle> vehicles = vehicleRepository.findAllByCompanyIn(pageable,
+                manager.getEnterprises());
         if (vehicles.isEmpty()) {
             log.info("Vehicles not found");
-            return new ArrayList<>();
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
         }
-        return vehicles.stream().filter(v -> manager.getEnterprises().contains(v.getCompany()))
-                .map(carMapper::entityToDto).toList();
+        List<CarDto> carDtoList = vehicles.stream().map(carMapper::entityToDto).toList();
+        return new PageImpl<>(carDtoList, pageable, vehicles.getTotalElements());
     }
 
     public VehicleDto findById(Integer id) {
@@ -89,6 +98,7 @@ public class VehicleService {
         Optional<Vehicle> optionalVehicle = vehicleRepository.findById(id);
         if (optionalVehicle.isEmpty()) {
             log.info("Vehicles not found");
+            return;
         }
         entity.setId(optionalVehicle.get().getId());
         vehicleRepository.save(entity);
@@ -102,21 +112,37 @@ public class VehicleService {
     @Transactional
     public List<Vehicle> generateVehicles(int count, Enterprise enterprise) {
         List<Vehicle> result = new ArrayList<>();
-        List<BrandDto> allBrands = brandService.getAllBrands();
+        List<Brand> allBrands = brandService.getAllBrandsEntities();
         for (int i = 0; i < count; i++) {
             Vehicle vehicle = new Vehicle();
             vehicle.setPrice(Generator.generateLong());
             vehicle.setYearManufacture(Generator.generateString());
-            Optional<String> brandName = allBrands.stream().findAny().map(BrandDto::getName);
-            if (brandName.isEmpty()) {
-                throw new BadRequestException("Brands not found");
-            }
-            Brand brand = brandService.findByName(brandName.get());
-            vehicle.setCarBrand(brand);
+            vehicle.setCarBrand(allBrands.stream().findAny().get());
             vehicle.setCompany(enterprise);
             result.add(vehicle);
         }
         vehicleRepository.saveAll(result);
         return result;
+    }
+
+    @Transactional
+    public void deleteFromEnterprise(Integer id) {
+        Optional<Vehicle> optionalVehicle = vehicleRepository.findById(id);
+        if (optionalVehicle.isEmpty()) {
+            log.info("Vehicles not found");
+        }
+        Vehicle vehicle = optionalVehicle.get();
+        vehicle.setCompany(null);
+        vehicleRepository.save(vehicle);
+    }
+
+    public List<CarTrackDto> getVehicleTrackByVehicleId(Integer id) {
+        Optional<Vehicle> optionalVehicle = vehicleRepository.findById(id);
+        if (optionalVehicle.isEmpty()) {
+            log.info("Vehicles not found");
+            return Collections.emptyList();
+        }
+        return optionalVehicle.get().getTracks().stream().map(carTrackMapper::entityToDto)
+                .collect(Collectors.toList());
     }
 }

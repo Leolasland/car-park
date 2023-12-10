@@ -1,4 +1,4 @@
-package ru.project.carpark.controller;
+package ru.project.carpark.controller.view;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,11 +19,6 @@ public class VehicleController {
 
     private final VehicleService vehicleService;
     private final BrandService brandService;
-
-    @GetMapping("/index")
-    public String getAll() {
-        return "index";
-    }
 
     @GetMapping("/car")
     public String getAllCars(Model model) {

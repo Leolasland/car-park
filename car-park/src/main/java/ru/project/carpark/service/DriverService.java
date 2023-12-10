@@ -2,23 +2,23 @@ package ru.project.carpark.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.project.carpark.converter.DriverMapper;
-import ru.project.carpark.dto.BrandDto;
 import ru.project.carpark.dto.DriverDto;
-import ru.project.carpark.entity.*;
-import ru.project.carpark.exception.BadRequestException;
+import ru.project.carpark.entity.Driver;
+import ru.project.carpark.entity.Enterprise;
+import ru.project.carpark.entity.Manager;
 import ru.project.carpark.repository.DriverRepository;
 import ru.project.carpark.repository.ManagerRepository;
 import ru.project.carpark.utils.Generator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,21 +29,27 @@ public class DriverService {
     private final DriverMapper driverMapper;
     private final ManagerRepository managerRepository;
 
-    public List<DriverDto> getAllDrivers() {
+    private static final Pageable PAGEABLE = Pageable.ofSize(50);
+
+    public Page<DriverDto> getAllDrivers(Pageable pageable) {
+        pageable = Objects.isNull(pageable) ? PAGEABLE : pageable;
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
         Optional<Manager> managerByName = managerRepository.findManagerByName(name);
         if (managerByName.isEmpty()) {
-            return Collections.emptyList();
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
         }
         Manager manager = managerByName.get();
-        List<Driver> drivers = driverRepository.findAll();
+
+        Page<Driver> drivers = driverRepository.findAllByEmployerIn(pageable,
+                manager.getEnterprises());
         if (drivers.isEmpty()) {
             log.info("Drivers are not found");
-            return new ArrayList<>();
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
         }
-        return drivers.stream().filter(d -> manager.getEnterprises().contains(d.getEmployer()))
-                .map(driverMapper::entityToDto).toList();
+        List<DriverDto> driverDtoList = drivers.stream().map(driverMapper::entityToDto).toList();
+        return new PageImpl<>(driverDtoList, pageable, drivers.getTotalElements());
     }
 
     @Transactional
@@ -58,5 +64,14 @@ public class DriverService {
         }
         driverRepository.saveAll(result);
         return result;
+    }
+
+    public DriverDto findById(Integer id) {
+        Optional<Driver> optionalDriver = driverRepository.findById(id);
+        if (optionalDriver.isEmpty()) {
+            log.info("Driver not found");
+            return null;
+        }
+        return driverMapper.entityToDto(optionalDriver.get());
     }
 }

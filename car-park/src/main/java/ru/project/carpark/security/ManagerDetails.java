@@ -2,13 +2,11 @@ package ru.project.carpark.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import ru.project.carpark.entity.Manager;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 public class ManagerDetails extends User {
 
