@@ -4,26 +4,19 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.locationtech.jts.geom.Point;
 
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-
+import java.util.List;
 
 @Entity
-@Table(name = "vehicle_track")
+@Table(name = "ride")
 @Data
-public class CarTrack {
+public class Ride {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @Column(columnDefinition = "geometry(Point,4326)", name = "coordinates")
-    private Point carCoordinates;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -33,10 +26,12 @@ public class CarTrack {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "ride_id", referencedColumnName = "id")
-    private Ride ride;
+    @OneToMany(mappedBy = "ride")
+    private List<CarTrack> tracks;
 
-    @Column(name = "dt_point")
-    private ZonedDateTime dtPoint = ZonedDateTime.now(ZoneOffset.UTC);
+    @Column(name = "dt_start")
+    private ZonedDateTime dtStart;
+
+    @Column(name = "dt_end")
+    private ZonedDateTime dtEnd;
 }

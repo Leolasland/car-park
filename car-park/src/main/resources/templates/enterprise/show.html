@@ -50,6 +50,7 @@
                 <th scope="col">Time of buy</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody id="vehicle-list">
@@ -105,6 +106,9 @@
                     '<td> <button onclick="deleteVehicle(' + data.id + ')" class="btn btn-outline-secondary d-inline-flex align-items-center" type="button">Delete' +
                     '  </button>' +
                     '</td>' +
+                    '<td> <button onclick="showVehicle(' + data.id + ')" class="btn btn-primary d-inline-flex align-items-center" type="button">More' +
+                    '  </button>' +
+                    '</td>' +
                     '</tr>'
                 )
             });
@@ -119,6 +123,9 @@
                 location.reload();
             }
         });
+    }
+    const showVehicle = (id) => {
+        window.location.href = '../car/' + id;
     }
     const editModel = (id) => {
         window.location.href = '../car/' + id + '/edit';

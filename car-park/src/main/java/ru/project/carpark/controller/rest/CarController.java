@@ -6,10 +6,9 @@ import org.geojson.GeoJsonObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import ru.project.carpark.dto.CarDto;
-import ru.project.carpark.dto.CarTrackDto;
-import ru.project.carpark.dto.VehicleDto;
+import ru.project.carpark.dto.*;
 import ru.project.carpark.service.CarTrackService;
+import ru.project.carpark.service.RideService;
 import ru.project.carpark.service.VehicleService;
 
 import java.util.List;
@@ -21,6 +20,8 @@ public class CarController {
 
     private final VehicleService vehicleService;
     private final CarTrackService carTrackService;
+
+    private final RideService rideService;
 
     @GetMapping
     public Page<CarDto> allCars(Pageable pageable) {
@@ -55,5 +56,19 @@ public class CarController {
     @GetMapping("/{id}/track/GEO_JSON")
     public GeoJsonObject geoGetCarTrackByCar(@PathVariable("id") Integer id) {
         return carTrackService.mapToGeo(vehicleService.getVehicleTrackByVehicleId(id), id);
+    }
+
+    @GetMapping("/{id}/track")
+    public List<PointDto> getCarTrackByCarAndDate(@PathVariable("id") Integer id,
+                                                  @RequestParam String start,
+                                                  @RequestParam String end) {
+        return rideService.getRideByVehicleIdAndDate(id, start, end);
+    }
+
+    @GetMapping("/{id}/track/all")
+    public List<RideDto> getAllCarTrackByCarAndDate(@PathVariable("id") Integer id,
+                                                    @RequestParam String start,
+                                                    @RequestParam String end) {
+        return rideService.getAllCarTrackByCarAndDate(id, start, end);
     }
 }

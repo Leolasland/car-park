@@ -20,6 +20,7 @@ public interface VehicleMapper {
     @Mapping(target = "company", ignore = true)
     @Mapping(target = "drivers", ignore = true)
     @Mapping(target = "tracks", ignore = true)
+    @Mapping(target = "rides", ignore = true)
     Vehicle dtoToEntity(VehicleDto vehicleDto);
 
     @Named("defineDate")

@@ -52,4 +52,9 @@ public class Vehicle {
     @ToString.Exclude
     @OneToMany(mappedBy = "vehicle")
     private List<CarTrack> tracks;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "vehicle")
+    private List<Ride> rides;
 }

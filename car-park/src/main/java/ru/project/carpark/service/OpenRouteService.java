@@ -28,6 +28,9 @@ public class OpenRouteService {
     @Value("${openroute.track.url}")
     private String trackUrl;
 
+    @Value("${openroute.geocode.reverse.url}")
+    private String geocodeReverseUrl;
+
     public GeoJsonObject getGeocode(String country, String city) {
         String url = geocodeUrl + headerValue +
                 "&country=" + country +
@@ -48,6 +51,13 @@ public class OpenRouteService {
         String url = trackUrl + headerValue +
                 "&start=" + start +
                 "&end=" + end;
+        ResponseEntity<GeoJsonObject> response = restTemplate.getForEntity(url, GeoJsonObject.class);
+        return response.getBody();
+    }
+
+    public GeoJsonObject getGeocodeReverse(double lon, double lan) {
+        String url = geocodeReverseUrl + headerValue + "&point.lon=" + lon + "&point.lat=" + lan +
+                "&sources=openaddresses";
         ResponseEntity<GeoJsonObject> response = restTemplate.getForEntity(url, GeoJsonObject.class);
         return response.getBody();
     }

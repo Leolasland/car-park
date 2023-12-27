@@ -12,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.project.carpark.dto.CarTrackDto;
 import ru.project.carpark.dto.openroute.RequestOpenRouteDto;
 import ru.project.carpark.entity.CarTrack;
+import ru.project.carpark.entity.Ride;
 import ru.project.carpark.entity.Vehicle;
 import ru.project.carpark.repository.CarTrackRepository;
+import ru.project.carpark.repository.RideRepository;
 import ru.project.carpark.repository.VehicleRepository;
 import ru.project.carpark.utils.Generator;
 
@@ -28,6 +30,7 @@ public class CarTrackService {
     private final CarTrackRepository carTrackRepository;
     private final OpenRouteService openRouteService;
     private final VehicleRepository vehicleRepository;
+    private final RideService rideService;
     private final ApplicationContext applicationContext;
 
     public CarTrack findById(Integer id) {
@@ -53,14 +56,17 @@ public class CarTrackService {
         List<CarTrack> result = new ArrayList<>();
         LineString lineString = (LineString) features.get(0).getGeometry();
         List<LngLatAlt> coordinates = lineString.getCoordinates();
-        ZonedDateTime now = ZonedDateTime.now().minusSeconds(coordinates.size() * 10L);
+        ZonedDateTime end = ZonedDateTime.now();
+        ZonedDateTime start = end.minusSeconds(coordinates.size() * 10L);
+        Ride ride = rideService.createRide(vehicle, start, end);
         GeometryFactory geometryFactory = new GeometryFactory();
         for (int i = 0; i < coordinates.size(); i++) {
             CarTrack carTrack = new CarTrack();
             carTrack.setVehicle(vehicle);
-            carTrack.setDtPoint(now.plusSeconds(i * 10L));
+            carTrack.setDtPoint(start.plusSeconds(i * 10L));
             carTrack.setCarCoordinates(geometryFactory.createPoint(new Coordinate(coordinates.get(i).getLongitude(),
                     coordinates.get(i).getLatitude())));
+            carTrack.setRide(ride);
             result.add(carTrack);
         }
         carTrackRepository.saveAll(result);

@@ -24,5 +24,8 @@
     <include file="classpath:db/data/add_time_vehicle.sql" relativeToChangelogFile="false"/>
     <include file="classpath:db/data/create_table_vehicle_track.sql" relativeToChangelogFile="false"/>
     <include file="classpath:db/data/add_time_vehicle_track.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:db/data/create_table_ride.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:db/data/init_table_ride.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:db/data/alter_column_ref_ride_to_track.sql" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>
