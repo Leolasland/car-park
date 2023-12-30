@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.GeoJsonObject;
-import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.project.carpark.converter.CarTrackMapper;
 import ru.project.carpark.converter.RideMapper;
 import ru.project.carpark.dto.CarTrackDto;
 import ru.project.carpark.dto.PointDto;
@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -38,6 +37,7 @@ public class RideService {
 
     private final RideMapper rideMapper;
     private final OpenRouteService openRouteService;
+    private final CarTrackMapper carTrackMapper;
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss")
             .withZone(ZoneOffset.UTC);
@@ -59,6 +59,11 @@ public class RideService {
         }
         Vehicle vehicle = optionalVehicle.get();
 
+        if (start != null && end != null) {
+            start = start.replace('T', '_');
+            end = end.replace('T', '_');
+        }
+
         ZonedDateTime dtStart = ZonedDateTime.parse(start, FORMATTER);
         ZonedDateTime dtEnd = ZonedDateTime.parse(end, FORMATTER);
 
@@ -75,6 +80,11 @@ public class RideService {
             return Collections.emptyList();
         }
         Vehicle vehicle = optionalVehicle.get();
+
+        if (start != null || end != null) {
+            start = start.replace('T', '_');
+            end = end.replace('T', '_');
+        }
 
         ZonedDateTime dtStart = ZonedDateTime.parse(start, FORMATTER);
         ZonedDateTime dtEnd = ZonedDateTime.parse(end, FORMATTER);
@@ -94,5 +104,15 @@ public class RideService {
         GeoJsonObject geocodeReverse = openRouteService.getGeocodeReverse(lon, lan);
         List<Feature> features = ((FeatureCollection) geocodeReverse).getFeatures();
         return features.get(0).getProperties().get("label").toString();
+    }
+
+    public List<CarTrackDto> getRideByID(Integer rideId) {
+        Optional<Ride> optionalRide = rideRepository.findById(rideId);
+        if (optionalRide.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<CarTrack> tracks = optionalRide.get().getTracks();
+        return tracks.stream().map(carTrackMapper::entityToDto)
+                .toList();
     }
 }

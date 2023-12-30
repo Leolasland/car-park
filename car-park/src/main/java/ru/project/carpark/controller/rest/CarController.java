@@ -71,4 +71,10 @@ public class CarController {
                                                     @RequestParam String end) {
         return rideService.getAllCarTrackByCarAndDate(id, start, end);
     }
+
+    @GetMapping("/{id}/track/{rideId}")
+    public List<CarTrackDto> getRideByID(@PathVariable("id") Integer id,
+                                                    @PathVariable("rideId") Integer rideId) {
+        return rideService.getRideByID(rideId);
+    }
 }

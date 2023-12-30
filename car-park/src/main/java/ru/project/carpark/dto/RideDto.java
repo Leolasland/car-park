@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class RideDto {
 
+    private Integer id;
+
     private CoordinateDto startCoordinates;
 
     private CoordinateDto endCoordinates;

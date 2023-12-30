@@ -78,7 +78,7 @@ public class CarTrackService {
         for (CarTrackDto dto : trackDtoList) {
             Feature feature = new Feature();
             feature.setId(dto.getId().toString());
-            feature.setGeometry(new Point(dto.getCarCoordinates().getX(), dto.getCarCoordinates().getY()));
+            feature.setGeometry(new Point(dto.getCarCoordinates().getLongitude(), dto.getCarCoordinates().getLatitude()));
             feature.setProperties(Map.of("vehicleId", id, "dtPoint", dto.getDtPoint()));
             features.add(feature);
         }
