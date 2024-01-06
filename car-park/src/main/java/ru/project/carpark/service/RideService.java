@@ -21,6 +21,7 @@ import ru.project.carpark.repository.VehicleRepository;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -40,6 +41,8 @@ public class RideService {
     private final CarTrackMapper carTrackMapper;
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss")
+            .withZone(ZoneOffset.UTC);
+    private static final DateTimeFormatter FORMATTER_WITHOUT_SECONDS = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm")
             .withZone(ZoneOffset.UTC);
 
     @Transactional
@@ -81,13 +84,24 @@ public class RideService {
         }
         Vehicle vehicle = optionalVehicle.get();
 
-        if (start != null || end != null) {
-            start = start.replace('T', '_');
-            end = end.replace('T', '_');
+        if (start == null || end == null || start.isEmpty() || end.isEmpty()) {
+            return Collections.emptyList();
         }
 
-        ZonedDateTime dtStart = ZonedDateTime.parse(start, FORMATTER);
-        ZonedDateTime dtEnd = ZonedDateTime.parse(end, FORMATTER);
+        ZonedDateTime dtStart;
+        ZonedDateTime dtEnd;
+        try {
+            dtStart = ZonedDateTime.parse(start.replace('T', '_'), FORMATTER);
+            dtEnd = ZonedDateTime.parse(end.replace('T', '_'), FORMATTER);
+        } catch (DateTimeParseException ex) {
+            try {
+                dtStart = ZonedDateTime.parse(start.replace('T', '_'), FORMATTER_WITHOUT_SECONDS);
+                dtEnd = ZonedDateTime.parse(end.replace('T', '_'), FORMATTER_WITHOUT_SECONDS);
+            } catch (DateTimeParseException e) {
+                log.error("Invalid Date format for {} or {}", start, end);
+                return Collections.emptyList();
+            }
+        }
 
         List<Ride> rides = rideRepository.findAllByVehicleAndDtStartAfterAndDtEndBefore(vehicle, dtStart, dtEnd);
         List<RideDto> rideDtoList = rides.stream().map(rideMapper::rideEntityToDate).toList();

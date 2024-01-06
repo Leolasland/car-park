@@ -1,2 +1,2 @@
-insert into manager (id, name, password) VALUES (1, 'Inna', null);
-insert into manager (id, name, password) VALUES (2, 'Jack', null);
+insert into manager (id, name, password) VALUES (1, 'Inna', '$2a$10$YoshGpPu6Z9NDPUM89xVJekA75QOok0Rhu44Sa0LM3d05PT4DjAyO');
+insert into manager (id, name, password) VALUES (2, 'Jack', '$2a$10$qhdTXnTlmxOj2KyC0d28rOvH.ggcaoFbiQE0E833JQn7A6D/zC5E6');
