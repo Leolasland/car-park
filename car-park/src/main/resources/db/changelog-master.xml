@@ -26,6 +26,5 @@
     <include file="classpath:db/data/add_time_vehicle_track.sql" relativeToChangelogFile="false"/>
     <include file="classpath:db/data/create_table_ride.sql" relativeToChangelogFile="false"/>
     <include file="classpath:db/data/init_table_ride.sql" relativeToChangelogFile="false"/>
-    <include file="classpath:db/data/postgres_dump/changelog.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>
