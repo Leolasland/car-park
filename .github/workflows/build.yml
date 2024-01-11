@@ -35,7 +35,7 @@ jobs:
       id: global_env
       run: |
         echo ::set-env name=IMAGE_REPOSITORY::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
-        echo ::set-env name=DOCKERHUB_IMAGE_NAME::docker.pkg.github.com/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')/$(echo ${{ github.repository#*/ }} | tr '[:upper:]' '[:lower:]')
+        echo ::set-env name=DOCKERHUB_IMAGE_NAME::docker.pkg.github.com/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
 
 #     Build Docker image:
     - name: Build and tag image
