@@ -30,27 +30,19 @@ jobs:
     - name: Build with Maven
       run: mvn -B clean package --file car-park/pom.xml
 
-    - name: Save state
-      run: echo "{GITHUB_REPOSITORY}={/Leolasland/car-park/car-park}" >> $GITHUB_REPOSITORY
-
-#     Set global environment variables:
-    - name: set global env
-      id: global_env
+    - name: PrepareReg Names
       run: |
-        echo "::set-output name=IMAGE_NAME::${GITHUB_REPOSITORY#*/}"
-        echo "::set-output name=DOCKERHUB_IMAGE_NAME::docker.pkg.github.com/${GITHUB_REPOSITORY}/${GITHUB_REPOSITORY#*/}"
-      
+        echo IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+        echo DOCKERHUB_IMAGE_NAME=docker.pkg.github.com/${{ env.IMAGE_NAME }}/${{ env.IMAGE_NAME#*/ }} >> $GITHUB_ENV
 
 #     Build Docker image:
     - name: Build and tag image
       run: |
-        docker build -t "${{ steps.global_env.outputs.DOCKERHUB_IMAGE_NAME }}:latest" -t "${{ steps.global_env.outputs.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::8}" .
+        docker build -t "${{ env.DOCKERHUB_IMAGE_NAME }}:latest" -t "${{ env.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::8}" .
 
     - name: Docker login
       run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{secrets.GITHUB_TOKEN}}
 
 #     Publish image to github package repository:
     - name: Publish image
-      env:
-        IMAGE_NAME: $GITHUB_REPOSITORY
-      run: docker push "docker.pkg.github.com/$GITHUB_REPOSITORY/${{ steps.global_env.outputs.IMAGE_NAME }}"
+      run: docker push "docker.pkg.github.com/${{ env.IMAGE_NAME }}/${{ env.IMAGE_NAME }}"
