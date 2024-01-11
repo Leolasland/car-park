@@ -30,13 +30,19 @@ jobs:
     - name: Build with Maven
       run: mvn -B clean package --file car-park/pom.xml
       
+
+    - name: set lower case owner name
+      run: |
+        echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+      env:
+        OWNER: '${{ github.repository_owner }}'
+
 #     Set global environment variables:
     - name: set global env
       id: global_env
       run: |
-        echo "::set-output name=MY_GITHUB_REPOSITORY::leolasland/car-park"
-        echo "::set-output name=IMAGE_NAME::${MY_GITHUB_REPOSITORY#*/}"
-        echo "::set-output name=DOCKERHUB_IMAGE_NAME::docker.pkg.github.com/${MY_GITHUB_REPOSITORY}/${MY_GITHUB_REPOSITORY#*/}"
+        echo "::set-output name=IMAGE_NAME::${GITHUB_REPOSITORY#*/}"
+        echo "::set-output name=DOCKERHUB_IMAGE_NAME::docker.pkg.github.com/${GITHUB_REPOSITORY}/${GITHUB_REPOSITORY#*/}"
 
 #     Build Docker image:
     - name: Build and tag image
@@ -49,5 +55,5 @@ jobs:
 #     Publish image to github package repository:
     - name: Publish image
       env:
-        IMAGE_NAME: $MY_GITHUB_REPOSITORY
-      run: docker push "docker.pkg.github.com/$MY_GITHUB_REPOSITORY/${{ steps.global_env.outputs.IMAGE_NAME }}"
+        IMAGE_NAME: $GITHUB_REPOSITORY
+      run: docker push "docker.pkg.github.com/$GITHUB_REPOSITORY/${{ steps.global_env.outputs.IMAGE_NAME }}"
