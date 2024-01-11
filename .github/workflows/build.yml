@@ -33,7 +33,7 @@ jobs:
     - name: PrepareReg Names
       run: |
         echo IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
-        echo DOCKERHUB_IMAGE_NAME=docker.pkg.github.com/${{ env.IMAGE_NAME }}/${{ env.IMAGE_NAME }} >> $GITHUB_ENV
+        echo DOCKERHUB_IMAGE_NAME=docker.pkg.github.com/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
 #     Build Docker image:
     - name: Build and tag image
