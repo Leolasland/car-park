@@ -39,7 +39,7 @@ jobs:
     - name: Build and tag image
       run: |
         pwd
-        ls
+        ls -la
         docker build -t "${{ env.DOCKERHUB_IMAGE_NAME }}:latest" -t "${{ env.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::8}" .
 
     - name: Docker login
