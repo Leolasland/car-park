@@ -38,8 +38,7 @@ jobs:
 #     Build Docker image:
     - name: Build and tag image
       run: |
-        pwd
-        ls -la
+        cd $(echo  ${GITHUB_REPOSITORY#*/} | tr '[:upper:]' '[:lower:]')
         docker build -t "${{ env.DOCKERHUB_IMAGE_NAME }}:latest" -t "${{ env.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::8}" .
 
     - name: Docker login
