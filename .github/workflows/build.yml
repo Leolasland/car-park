@@ -46,4 +46,4 @@ jobs:
 
 #     Publish image to github package repository:
     - name: Publish image
-      run: docker push "docker.pkg.github.com/${{ env.IMAGE_NAME }}/${{ env.IMAGE_NAME }}"
+      run: docker push "${{ env.DOCKERHUB_IMAGE_NAME }}"
