@@ -24,7 +24,7 @@ jobs:
           SSH_HOST: ${{ secrets.STAND_SSH_HOST }}
 
       - name: Copy docker-compose.yml
-        run: scp -F ~/.ssh/config -i ~/.ssh/test-stand.key car-park/docker-compose.yml test-stand:docker-compose.yml
+        run: scp -F ~/.ssh/config -i ~/.ssh/test-stand.key car-park/docker-compose-deploy.yml test-stand:docker-compose.yml
 
       - name: Run docker-compose
         run: ssh test-stand 'docker-compose up -d'
