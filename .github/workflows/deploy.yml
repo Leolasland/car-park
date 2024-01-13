@@ -23,14 +23,8 @@ jobs:
           SSH_KEY: ${{ secrets.STAND_SSH_KEY }}
           SSH_HOST: ${{ secrets.STAND_SSH_HOST }}
 
-      - name: My Check
-        run: |
-          pwd && ls -la
-          cd car-park && pwd && ls -la
-          pwd && ls -la car-park || exit 0
-
       - name: Copy docker-compose.yml
-        run: scp -F ~/.ssh/config -i ~/.ssh/test-stand.key car-park/car-park/docker-compose.yml test-stand:docker-compose.yml
+        run: scp -F ~/.ssh/config -i ~/.ssh/test-stand.key car-park/docker-compose.yml test-stand:docker-compose.yml
 
       - name: Run docker-compose
         run: ssh test-stand 'docker-compose up -d'
