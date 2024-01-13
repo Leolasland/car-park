@@ -28,3 +28,6 @@ jobs:
 
       - name: Run docker-compose
         run: ssh test-stand 'docker-compose up -d'
+        
+      - name: Clean up secrets
+        run: rm -f ~/.ssh/test-stand.key ~/.ssh/config
