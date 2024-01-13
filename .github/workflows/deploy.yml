@@ -24,13 +24,13 @@ jobs:
           SSH_HOST: ${{ secrets.STAND_SSH_HOST }}
 
       - name: Copy docker-compose.yml
-        run: scp -F ~/.ssh/config -i ~/.ssh/test-stand.key car-park/docker-compose-deploy.yml test-stand:docker-compose.yml || rm -f ~/.ssh/test-stand.key ~/.ssh/config && exit 1
+        run: scp -F ~/.ssh/config -i ~/.ssh/test-stand.key car-park/docker-compose-deploy.yml test-stand:docker-compose.yml || (rm -f ~/.ssh/test-stand.key ~/.ssh/config && exit 1)
 
       - name: Run docker-compose
-        run: ssh test-stand 'docker-compose pull && docker-compose up -d' || rm -f ~/.ssh/test-stand.key ~/.ssh/config && exit 1
+        run: ssh test-stand 'docker-compose pull && docker-compose up -d' || (rm -f ~/.ssh/test-stand.key ~/.ssh/config && exit 1)
         
       - name: Clean up docker
-        run: ssh test-stand 'docker system prune -af' || rm -f ~/.ssh/test-stand.key ~/.ssh/config && exit 1
+        run: ssh test-stand 'docker system prune -af' || (rm -f ~/.ssh/test-stand.key ~/.ssh/config && exit 1)
         
       - name: Clean up secrets
         run: rm -f ~/.ssh/test-stand.key ~/.ssh/config
