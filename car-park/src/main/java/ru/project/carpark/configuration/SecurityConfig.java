@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(l -> l.loginPage("/login")
-                        .defaultSuccessUrl("/index/enterprise"))
+                        .defaultSuccessUrl("/index/enterprise", true))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/login", "/static/**").permitAll()
                         .requestMatchers(HttpMethod.POST).hasRole(ROLE_MANAGER)
