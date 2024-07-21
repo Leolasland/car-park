@@ -10,15 +10,13 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import ru.project.carpark.service.ManagerDetailsService;
+import ru.project.carpark.service.impl.ManagerDetailsServiceImpl;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -26,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final ManagerDetailsService managerDetailsService;
+    private final ManagerDetailsServiceImpl managerDetailsService;
 
     private static final String ROLE_MANAGER = "MANAGER";
 

@@ -1,4 +1,4 @@
-package ru.project.carpark.dto.openroute;
+package ru.project.carparkgenerator.dto.openroute;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

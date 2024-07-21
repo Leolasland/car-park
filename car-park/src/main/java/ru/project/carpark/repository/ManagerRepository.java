@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface ManagerRepository extends JpaRepository<Manager, Integer> {
 
     Optional<Manager> findManagerByName(String name);
+
+    Optional<Manager> findManagerByChatId(Long chatId);
 }

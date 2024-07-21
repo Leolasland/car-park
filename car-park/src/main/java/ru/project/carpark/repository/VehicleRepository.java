@@ -11,4 +11,6 @@ import java.util.List;
 public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
 
     Page<Vehicle> findAllByCompanyIn(Pageable pageable, List<Enterprise> company);
+
+    List<Vehicle> findAllByCompany(Enterprise company);
 }

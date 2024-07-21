@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.project.carpark.converter.BrandMapperImpl;
-import ru.project.carpark.dto.BrandDto;
+import ru.project.carpark.entity.Brand;
 import ru.project.carpark.repository.BrandRepository;
+import ru.project.carpark.service.impl.BrandServiceImpl;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BrandServiceTests {
+class BrandServiceImplTests {
 
     @Mock
     private BrandRepository brandRepository;
@@ -24,8 +24,8 @@ class BrandServiceTests {
     void getAllBrandsTest() {
         when(brandRepository.findAll()).thenReturn(Collections.emptyList());
 
-        BrandService brandService = new BrandService(brandRepository, new BrandMapperImpl());
-        List<BrandDto> result = brandService.getAllBrands();
+        BrandServiceImpl brandService = new BrandServiceImpl(brandRepository);
+        List<Brand> result = brandService.getAllBrandsEntities();
         assertTrue(result.isEmpty());
     }
 

@@ -1,13 +1,18 @@
 package ru.project.carpark.controller.view;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.project.carpark.converter.BrandMapper;
+import ru.project.carpark.converter.VehicleMapper;
 import ru.project.carpark.dto.BrandDto;
 import ru.project.carpark.dto.VehicleDto;
-import ru.project.carpark.service.BrandService;
+import ru.project.carpark.entity.Brand;
+import ru.project.carpark.entity.Vehicle;
+import ru.project.carpark.repository.BrandRepository;
+import ru.project.carpark.repository.VehicleRepository;
 import ru.project.carpark.service.VehicleService;
 
 import java.util.List;
@@ -15,35 +20,42 @@ import java.util.List;
 @Controller
 @RequestMapping
 @RequiredArgsConstructor
+@Slf4j
 public class VehicleController {
 
+    private final VehicleRepository vehicleRepository;
+    private final VehicleMapper vehicleMapper;
     private final VehicleService vehicleService;
-    private final BrandService brandService;
+    private final BrandRepository brandRepository;
+    private final BrandMapper brandMapper;
 
     @GetMapping("/car")
     public String getAllCars(Model model) {
-        List<VehicleDto> vehicles = vehicleService.getAllVehicles();
+        List<VehicleDto> vehicles = vehicleRepository.findAll().stream()
+                .map(vehicleMapper::entityToDto).toList();
+        log.info("Vehicles are {}", vehicles);
         model.addAttribute("vehicles", vehicles);
         return "car/index";
     }
 
-    @GetMapping("/car/new")
-    public String newCar(@ModelAttribute("vehicle") VehicleDto vehicle, Model model) {
-        List<BrandDto> brands = brandService.getAllBrands();
-        model.addAttribute("brands", brands);
-        return "car/new";
-    }
-
     @PostMapping("/car")
     public String createCar(@ModelAttribute("vehicle") VehicleDto vehicle) {
-        vehicleService.save(vehicle);
+        log.info("Save {}", vehicle);
+        Vehicle entity = vehicleMapper.dtoToEntity(vehicle);
+        Brand brand = findByName(vehicle.getCarBrand());
+        entity.setCarBrand(brand);
+        log.info("Try save vehicle {}, {}", entity, brand);
+        vehicleService.save(entity);
         return "redirect:/car";
     }
 
     @GetMapping("/car/{id}")
     public String showCar(@PathVariable("id") Integer id, Model model) {
+        long startTime = System.currentTimeMillis();
         VehicleDto vehicle = vehicleService.findById(id);
         model.addAttribute("vehicle", vehicle);
+        long endTime = System.currentTimeMillis();
+        log.info("Total execution time: {} ms", (endTime - startTime));
         return "car/show";
     }
 
@@ -51,7 +63,7 @@ public class VehicleController {
     public String editCar(@PathVariable("id") Integer id, Model model) {
         VehicleDto vehicle = vehicleService.findById(id);
         model.addAttribute("vehicle", vehicle);
-        List<BrandDto> brands = brandService.getAllBrands();
+        List<BrandDto> brands = findAllBrands();
         model.addAttribute("brands", brands);
         return "car/edit";
     }
@@ -67,5 +79,14 @@ public class VehicleController {
     public String deleteCar(@PathVariable("id") Integer id) {
         vehicleService.delete(id);
         return "redirect:/car";
+    }
+
+    private Brand findByName(String name) {
+        return brandRepository.findBrandByName(name).orElse(null);
+    }
+
+    private List<BrandDto> findAllBrands() {
+        return brandRepository.findAll().stream()
+                .map(brandMapper::entityToDto).toList();
     }
 }

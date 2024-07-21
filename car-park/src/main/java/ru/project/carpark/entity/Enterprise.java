@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -31,11 +29,13 @@ public class Enterprise {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "company")
+    //@Fetch(value = FetchMode.SUBSELECT)
     private List<Vehicle> vehicles;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "employer")
+    //@Fetch(value = FetchMode.SUBSELECT)
     private List<Driver> drivers;
 
     @EqualsAndHashCode.Exclude

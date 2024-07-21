@@ -11,4 +11,6 @@ import java.util.List;
 public interface EnterpriseRepository extends JpaRepository<Enterprise, Integer> {
 
     Page<Enterprise> findAllByManagersIn(Pageable pageable, List<Manager> managers);
+
+    List<Enterprise> findAllByManagers(Manager manager);
 }

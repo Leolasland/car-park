@@ -29,5 +29,31 @@ services:
     networks:
       - car-park
 
+  kafka:
+    image: bitnami/kafka:latest
+    restart: "no"
+    ports:
+      - "29092:29092"
+      - "9092:9092"
+    volumes:
+      - kafka_data:/bitnami/kafka
+    environment:
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_KRAFT_CLUSTER_ID: -1QqrYaLRbiC9qVwlBHO9A
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://0.0.0.0:9092,CONTROLLER://kafka:9093
+    labels:
+      amplicode.image: bitnami/kafka
+
+
+volumes:
+  kafka_data:
+
 networks:
   car-park:

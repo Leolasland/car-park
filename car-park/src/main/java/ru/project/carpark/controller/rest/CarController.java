@@ -1,11 +1,11 @@
 package ru.project.carpark.controller.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.geojson.FeatureCollection;
 import org.geojson.GeoJsonObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import ru.project.carpark.converter.VehicleMapper;
 import ru.project.carpark.dto.*;
 import ru.project.carpark.service.CarTrackService;
 import ru.project.carpark.service.RideService;
@@ -19,6 +19,7 @@ import java.util.List;
 public class CarController {
 
     private final VehicleService vehicleService;
+    private final VehicleMapper vehicleMapper;
     private final CarTrackService carTrackService;
 
     private final RideService rideService;
@@ -30,7 +31,7 @@ public class CarController {
 
     @PostMapping
     public void createVehicle(VehicleDto vehicle) {
-        vehicleService.save(vehicle);
+        vehicleService.save(vehicleMapper.dtoToEntity(vehicle));
     }
 
     @GetMapping("/{id}")
@@ -74,7 +75,7 @@ public class CarController {
 
     @GetMapping("/{id}/track/{rideId}")
     public List<CarTrackDto> getRideByID(@PathVariable("id") Integer id,
-                                                    @PathVariable("rideId") Integer rideId) {
+                                         @PathVariable("rideId") Integer rideId) {
         return rideService.getRideByID(rideId);
     }
 }

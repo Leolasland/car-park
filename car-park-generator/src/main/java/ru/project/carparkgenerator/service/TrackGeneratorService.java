@@ -1,16 +1,15 @@
-package ru.project.carpark.utils;
+package ru.project.carparkgenerator.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.project.carpark.service.CarTrackService;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class TrackGenerator {
+public class TrackGeneratorService {
 
-    private final CarTrackService carTrackService;
+    private final CarTrackGeneratorService carTrackGeneratorService;
 
     @ShellMethod(key = "generate-track", value = "Generate track for vehicle with introduced id")
     private String generateTrack(@ShellOption({"id", "-i"}) String id,
@@ -20,7 +19,7 @@ public class TrackGenerator {
                                  help = "Range introduced in km") String range,
                                  @ShellOption(defaultValue = ShellOption.NULL, value = {"point", "-p"},
                                  help = "Point step") String point) {
-        return carTrackService.generateTrack(Integer.parseInt(id), country, city,
+        return carTrackGeneratorService.generateTrack(Integer.parseInt(id), country, city,
                 range != null ? Integer.parseInt(range) : 0,
                 point != null ? Double.parseDouble(point) : 0);
     }

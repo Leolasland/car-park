@@ -33,4 +33,7 @@ public class Manager {
 
     @Column(name = "role")
     private String role;
+
+    @Column(name = "chat_id")
+    private Long chatId;
 }
