@@ -43,15 +43,6 @@ public class VehicleServiceImpl implements VehicleService {
 
     private static final Pageable PAGEABLE = Pageable.ofSize(50);
 
-    public List<VehicleDto> getAllVehicles() {
-        List<Vehicle> vehicles = vehicleRepository.findAll();
-        if (vehicles.isEmpty()) {
-            log.info("Vehicles not found");
-            return new ArrayList<>();
-        }
-        return vehicles.stream().map(vehicleMapper::entityToDto).toList();
-    }
-
     public Page<CarDto> getAllCars(Pageable pageable) {
         pageable = Objects.isNull(pageable) ? PAGEABLE : pageable;
 
@@ -85,8 +76,11 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Transactional
-    public void save(Vehicle vehicle) {
-        vehicleRepository.save(vehicle);
+    public void save(VehicleDto vehicle) {
+        Optional<Brand> brand = brandRepository.findBrandByName(vehicle.getCarBrand());
+        Vehicle entity = vehicleMapper.dtoToEntity(vehicle);
+        brand.ifPresent(entity::setCarBrand);
+        vehicleRepository.save(entity);
     }
 
     @Transactional

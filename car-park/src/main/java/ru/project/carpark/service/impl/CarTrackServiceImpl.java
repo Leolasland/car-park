@@ -14,6 +14,7 @@ import ru.project.carpark.entity.Vehicle;
 import ru.project.carpark.repository.CarTrackRepository;
 import ru.project.carpark.repository.VehicleRepository;
 import ru.project.carpark.service.CarTrackService;
+import ru.project.carpark.service.RideService;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class CarTrackServiceImpl implements CarTrackService {
 
     private final CarTrackRepository carTrackRepository;
     private final VehicleRepository vehicleRepository;
-    private final RideServiceImpl rideService;
+    private final RideService rideService;
 
     public CarTrack findById(Integer id) {
         Optional<CarTrack> optionalCarTrack = carTrackRepository.findById(id);

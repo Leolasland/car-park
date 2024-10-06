@@ -93,7 +93,7 @@
             '                    name="start"\n' +
             '                    value="' + lastMonth + '" />\n' +
             '            <br/>\n' +
-            '            <label for="datepicker-end">Enter a date and time for start:</label>\n' +
+            '            <label for="datepicker-end">Enter a date and time for end:</label>\n' +
             '            <input\n' +
             '                    id="datepicker-end"\n' +
             '                    type="datetime-local"\n' +
@@ -128,7 +128,8 @@
                     '</td>' +
                     '<td>' + new Date(Date.parse(data[i].dtEnd)) +
                     '</td>' +
-                    '<td> <button onclick="showTrack(' + data[i].id + ')" class="btn btn-primary d-inline-flex align-items-center" type="button">More' +
+                    '<td> <button onclick="showTrack(' + data[i].id + ')" class="btn btn-primary d-inline-flex align-items-center" ' +
+                    'id="buttonMoreMap" type="button">More' +
                     '  </button>' +
                     '</td>' +
                     '</tr>' +

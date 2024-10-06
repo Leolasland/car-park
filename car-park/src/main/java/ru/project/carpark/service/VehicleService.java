@@ -16,7 +16,7 @@ public interface VehicleService {
 
     VehicleDto findById(Integer id);
 
-    void save(Vehicle vehicle);
+    void save(VehicleDto vehicle);
 
     void update(Integer id, VehicleDto vehicle);
 

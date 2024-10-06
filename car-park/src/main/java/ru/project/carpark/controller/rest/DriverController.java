@@ -1,5 +1,8 @@
 package ru.project.carpark.controller.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +29,7 @@ import java.util.Optional;
 @RequestMapping("/driver")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Контроллер для водителей", description = "Управление водителями")
 public class DriverController {
 
     private static final Pageable PAGEABLE = Pageable.ofSize(50);
@@ -34,6 +38,7 @@ public class DriverController {
     private final DriverMapper driverMapper;
     private final ManagerRepository managerRepository;
 
+    @Operation(summary = "Список всех водителей", description = "Позволяет получить список всех водителей")
     @GetMapping
     public Page<DriverDto> allDrivers(Pageable pageable) {
         pageable = Objects.isNull(pageable) ? PAGEABLE : pageable;
@@ -53,8 +58,9 @@ public class DriverController {
         return new PageImpl<>(driverDtoList, pageable, drivers.getTotalElements());
     }
 
+    @Operation(summary = "Получить водителя по ид", description = "Позволяет получить водителя по ид")
     @GetMapping("/{id}")
-    public DriverDto getDriverById(@PathVariable("id") Integer id) {
+    public DriverDto getDriverById(@PathVariable("id") @Parameter(description = "Ид водителя") Integer id) {
         Optional<Driver> optionalDriver = driverRepository.findById(id);
         if (optionalDriver.isEmpty()) {
             log.info("Driver not found");

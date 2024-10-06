@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
 
   car-park-db:
@@ -17,15 +17,33 @@ services:
   car-park:
     container_name: car-park
     build:
+      context: car-park
       dockerfile: Dockerfile
     environment:
       JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5505
       SPRING_DATASOURCE_URL: jdbc:postgresql://car-park-db:5432/postgres
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     depends_on:
       - car-park-db
     ports:
       - "8086:8080"
       - "9096:5505"
+    networks:
+      - car-park
+
+  car-park-generator:
+    container_name: car-park-generator
+    build:
+      context: car-park-generator
+      dockerfile: Dockerfile
+    environment:
+      JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5505
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    depends_on:
+      - car-park
+    ports:
+      - "8085:8080"
+      - "9095:5505"
     networks:
       - car-park
 
@@ -48,8 +66,26 @@ services:
       KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
       KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_CFG_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://0.0.0.0:9092,CONTROLLER://kafka:9093
-    labels:
-      amplicode.image: bitnami/kafka
+    networks:
+      - car-park
+
+  grafana:
+    build: './config/grafana'
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
 
 
 volumes:

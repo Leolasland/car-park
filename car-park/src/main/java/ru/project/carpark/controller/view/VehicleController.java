@@ -45,7 +45,7 @@ public class VehicleController {
         Brand brand = findByName(vehicle.getCarBrand());
         entity.setCarBrand(brand);
         log.info("Try save vehicle {}, {}", entity, brand);
-        vehicleService.save(entity);
+        vehicleService.save(vehicle);
         return "redirect:/car";
     }
 
